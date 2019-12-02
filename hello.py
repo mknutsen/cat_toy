@@ -1,17 +1,22 @@
 from flask import Flask, render_template, request
+from gpiozero import LED
 
 app = Flask(__name__)
+led_r = LED(17)
+led_l = LED(18)
 
 @app.route("/", methods=['GET', 'POST'])
 def index():
     print(request.method)
     if request.method == 'POST':
-        if request.form.get('watch') == 'watch':
-            # pass
-            print("watched")
-        elif  request.form.get('download') == 'download':
+        if request.form.get('left') == 'left':
+            led_r.off()
+            led_l.on()
+        elif  request.form.get('right') == 'right':
             # pass # do something else
-            print("downloaded")
+            led_r.on()
+            led_l.off()
+
         else:
             # pass # unknown
             return render_template("index.html")
@@ -22,4 +27,4 @@ def index():
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host= '0.0.0.0', debug=True)
